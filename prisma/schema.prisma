@@ -7,23 +7,22 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 // NextAuth Modelleri
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -44,10 +43,10 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  password      String?   // Credentials provider için
+  password      String? // Credentials provider için
   accounts      Account[]
   sessions      Session[]
-  notes         Note[]    // Kullanıcının notları
+  notes         Note[] // Kullanıcının notları
 }
 
 model VerificationToken {
@@ -65,21 +64,21 @@ model Note {
   content   String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  analysis  Analysis? // Bire bir ilişki
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  analysis Analysis? // Bire bir ilişki
 }
 
 model Analysis {
-  id                  String   @id @default(cuid())
-  noteId              String   @unique
-  note                Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
-  
-  awarenessPoints     Json     // Farkındalık noktaları (Array)
-  counselorTopics     Json     // Danışmanla görüşülecek konular (Array)
-  emotionDistribution Json     // Duygu dağılımı (Object: {stres: 40, ...})
-  
-  createdAt           DateTime @default(now())
+  id     String @id @default(cuid())
+  noteId String @unique
+  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  awarenessPoints     Json // Farkındalık noktaları (Array)
+  counselorTopics     Json // Danışmanla görüşülecek konular (Array)
+  emotionDistribution Json // Duygu dağılımı (Object: {stres: 40, ...})
+
+  createdAt DateTime @default(now())
 }

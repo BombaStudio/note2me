@@ -26,7 +26,7 @@ export async function createNote(title: string, content: string) {
       data: {
         title,
         content,
-        userId: session.user.id as string,
+        userId: session.user?.id as string,
       },
     });
 
@@ -46,7 +46,7 @@ export async function getUserNotes() {
 
     const notes = await prisma.note.findMany({
       where: {
-        userId: session.user.id as string,
+        userId: session.user?.id as string,
       },
       orderBy: {
         createdAt: "desc",
